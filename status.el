@@ -131,7 +131,7 @@ periodically it `status-refresh-timer-delay' is set."
 the status displayed information See `status-format' custom
 variable and the `status-add-to-left' and `status-add-to-right'
 functions."
-  (when status-activated
+  (unless status-activated
     (unless (= 0 status-refresh-timer-delay)
       (setq status-refresh-timer
 	    (run-at-time 1 status-refresh-timer-delay 'status-update)))
@@ -143,13 +143,13 @@ functions."
 the status displayed information See `status-format' custom
 variable and the `status-add-to-left' and `status-add-to-right'
 functions."
-  (unless status-activated
+  (when status-activated
     (when status-refresh-timer
       (cancel-timer status-refresh-timer)
       (setq status-refresh-timer nil))
     (with-current-buffer status-module-buffer
       (erase-buffer))
-    (message (propertize "Status disabled." face 'error))))
+    (message (propertize "Status disabled." 'face 'error))))
 
 (defun toggle-status ()
   "Toggle whether to display custom information in the echo area.
