@@ -30,7 +30,7 @@
   "Status format to display the current battery in the status area"
   :group 'status-battery)
 
-(defvar status-battery-charging-fmt "%p%% %t")
+(defvar status-battery-charging-fmt "%p%%")
 
 (defface status-battery-charging-face
   '((t (:width ultra-expanded :inherit variable-pitch :foreground "RoyalBlue")))
