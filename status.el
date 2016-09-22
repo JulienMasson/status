@@ -39,6 +39,7 @@
 (require 'status-gnus)
 (require 'status-virtual-desktops)
 (require 'status-mem)
+(require 'status-cpu)
 (require 'status-battery)
 (require 'status-date)
 
