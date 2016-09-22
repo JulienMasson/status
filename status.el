@@ -40,6 +40,7 @@
 (require 'status-virtual-desktops)
 (require 'status-mem)
 (require 'status-cpu)
+(require 'status-net)
 (require 'status-battery)
 (require 'status-date)
 
