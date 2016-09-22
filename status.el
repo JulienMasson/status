@@ -44,6 +44,7 @@
 (require 'status-volume)
 (require 'status-battery)
 (require 'status-date)
+(require 'status-cscope)
 
 (defgroup status nil
   "Status management group."
