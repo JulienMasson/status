@@ -37,6 +37,7 @@
 (require 'status-project-manager)
 (require 'status-purple)
 (require 'status-gnus)
+(require 'status-virtual-desktops)
 (require 'status-battery)
 (require 'status-date)
 
