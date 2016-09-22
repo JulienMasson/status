@@ -47,7 +47,7 @@
 (defconst status-module-buffer (get-buffer " *Minibuf-0*")
   "Buffer in which write the status information.")
 
-(defcustom status-format '(("") (status-battery status-date))
+(defcustom status-format '(("") ())
   "Status format list.
 Each item of a sub-list can be :
  - a string: will be displayed as-is
