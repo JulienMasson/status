@@ -38,6 +38,7 @@
 (require 'status-purple)
 (require 'status-gnus)
 (require 'status-virtual-desktops)
+(require 'status-mem)
 (require 'status-battery)
 (require 'status-date)
 
