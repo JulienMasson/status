@@ -20,33 +20,35 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
+(require 'purple-status)
+
 (defgroup status-purple nil
   "Status purple group."
   :group 'status)
 
-(defcustom status-purple-fmt "✉ %s"
-  "Status format to display the current purple in the status area"
+(defcustom conversation-purple-separator ", "
+  "PURPLE conversation separator."
   :group 'status-purple)
 
-(defcustom status-purple-separator ", "
-  "PURPLE status separator."
-  :group 'status-purple)
-
-(defface status-purple-face
+(defface conversation-purple-face
   '((t (:weight bold :width ultra-expanded
 		:inherit variable-pitch :foreground "lightblue")))
   "face for current purple"
   :group 'status-purple)
 
-(defun status-purple-string ()
+(defun conversation-purple-string ()
   (let ((missed (remove-if 'zerop purple-chats :key (rcurry 'slot-value 'unread))))
     (mapconcat (lambda (chat) (format "%s(%d)" (oref chat title) (oref chat unread)))
-	       missed status-purple-separator)))
+	       missed conversation-purple-separator)))
 
 (eval-after-load "purple-chat"
-  '(progn (defun status-purple ()
-	    (let ((status (status-purple-string)))
-	      (when status
-		(propertize status 'face 'status-purple-face))))))
+  '(progn
+     (defun status-purple-conversation ()
+       (let ((conversation (conversation-purple-string)))
+	 (when (not (string-match conversation ""))
+	   (propertize conversation 'face 'conversation-purple-face))))
+     (defun status-purple-user ()
+       (let ((user (purple-status-find 'id (purple-call-method "PurpleSavedstatusGetCurrent"))))
+	 (propertize (concat (symbol-name (oref user typ))) 'face (assoc-default (oref user typ) purple-status-order))))))
 
 (provide 'status-purple)
