@@ -26,6 +26,12 @@
   "Status battery group."
   :group 'status)
 
+(defface status-battery-label-face
+  '((t (:weight bold :width ultra-expanded
+		:inherit variable-pitch :foreground "orange")))
+  "face for date and time"
+  :group 'status-battery)
+
 (defcustom status-battery-fmt "%s"
   "Status format to display the current battery in the status area"
   :group 'status-battery)
@@ -33,7 +39,7 @@
 (defvar status-battery-charging-fmt "%p%%")
 
 (defface status-battery-charging-face
-  '((t (:width ultra-expanded :inherit variable-pitch :foreground "RoyalBlue")))
+  '((t (:width ultra-expanded :inherit variable-pitch :foreground "DimGrey")))
   "face for date and time"
   :group 'status-faces)
 
@@ -53,7 +59,9 @@
 
 (defun status-battery ()
   (let ((batt-data (funcall battery-status-function)))
-    (flet ((make-batt-string (fmt face) (propertize (battery-format fmt batt-data) 'face face)))
+    (cl-flet ((make-batt-string (fmt face) (concat
+					    (propertize "BAT: " 'face 'status-battery-label-face)
+					    (propertize (battery-format fmt batt-data) 'face face))))
       (cond ((string= "Discharging" (cdr (assq ?B batt-data)))
 	     (make-batt-string status-battery-discharging-fmt 'status-battery-discharging-face))
 	    ((string= "100.0" (cdr (assq ?p batt-data)))

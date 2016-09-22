@@ -45,17 +45,17 @@
   :group 'status-gnus)
 
 (defface status-gnus-face-low
-  '((t (:background "RoyalBlue" :foreground "white" :weight bold)))
+  '((t (:foreground "ForestGreen" :weight bold)))
   "face for current gnus"
   :group 'status-gnus)
 
 (defface status-gnus-face-medium
-  '((t (:background "yellow" :foreground "black" :weight bold)))
+  '((t (:foreground "DarkOrange" :weight bold)))
   "face for current gnus"
   :group 'status-gnus)
 
 (defface status-gnus-face-high
-  '((t (:background "red1" :foreground "white" :weight bold)))
+  '((t (:foreground "DarkRed" :weight bold)))
   "face for current gnus"
   :group 'status-gnus)
 
@@ -67,7 +67,7 @@
 (defun status-gnus-group-to-string (group)
   (let ((unread (gnus-group-unread group)))
     (unless (zerop unread)
-      (propertize (format "%s:%d" group unread)
+      (propertize (format "%s:%d" (cdr (assoc group group-name-map-status)) unread)
 		  'face (status-gnus-get-group-face unread)))))
 
 (defun status-gnus-string ()

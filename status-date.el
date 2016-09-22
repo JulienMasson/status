@@ -32,13 +32,13 @@
 
 (defface status-date-face
   '((t (:width ultra-expanded :inherit variable-pitch
-	       :foreground "RoyalBlue")))
+	       :foreground "DimGrey")))
   "face for date and time"
   :group 'status-date)
 
 (defface status-time-face
   '((t (:weight bold :width ultra-expanded
-		:inherit variable-pitch :foreground "RoyalBlue")))
+		:inherit variable-pitch :foreground "orange")))
   "face for date and time"
   :group 'status-date)
 
