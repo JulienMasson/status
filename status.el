@@ -41,6 +41,7 @@
 (require 'status-mem)
 (require 'status-cpu)
 (require 'status-net)
+(require 'status-volume)
 (require 'status-battery)
 (require 'status-date)
 
