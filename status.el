@@ -46,6 +46,7 @@
 (require 'status-date)
 (require 'status-cscope)
 (require 'status-ctags)
+(require 'status-compilation)
 (require 'status-erc)
 
 (defgroup status nil
