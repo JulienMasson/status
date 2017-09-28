@@ -24,19 +24,14 @@
   "Status volume group."
   :group 'status)
 
-(defvar volume-value nil)
-
 (defface status-volume-label-face
   '((t (:weight bold :width ultra-expanded
 		:inherit variable-pitch :foreground "orange")))
   "face for volume"
   :group 'status-volume)
 
-(defcustom status-volume-fmt "%s%%"
-  "Status format to display the current used volumeory in the status area")
-
-(defcustom status-volume-fmt-state "%s"
-  "Status format to display the current used volumeory in the status area")
+(defcustom status-volume-fmt "%s"
+  "Status format to display the current volume in the status area")
 
 (defface status-volume-face
   '((t (:weight semi-light :width ultra-expanded
@@ -50,19 +45,16 @@
   "face for volume status"
   :group 'status-volume)
 
-(defun get-volume()
-  (setq default-directory "/")
-  (setq volume-str (split-string (shell-command-to-string "amixer get Master") "\n" t))
-  (setq volume-values (split-string (car (nthcdr 4 volume-str)) " " t))
-  (setq volume-state (subseq (car (nthcdr 5 volume-values)) 1 3))
-  (setq volume-value (subseq (car (nthcdr 3 volume-values)) 1 3)))
-
-
 (defun status-volume ()
-  (get-volume)
-  (concat (propertize "VOL: " 'face 'status-volume-label-face)
-	  (if (string= volume-state "on")
-	      (propertize (format status-volume-fmt volume-value) 'face 'status-volume-face)
-	    (propertize (format status-volume-fmt-state "Mute") 'face 'status-volume-face-state))))
+  (let* ((default-directory "/")
+	 (str (shell-command-to-string "amixer get Master")))
+    (when (string-match ".*\\[\\(.*%\\)\\].*\\[\\(.*\\)\\]$" str)
+      (let ((volume-value (match-string 1 str))
+	    (volume-state (match-string 2 str)))
+	(concat (propertize "VOL: " 'face 'status-volume-label-face)
+		(if (string= volume-state "on")
+		    (propertize (format status-volume-fmt volume-value) 'face 'status-volume-face)
+		  (propertize (format status-volume-fmt "Mute") 'face 'status-volume-face-state)))))))
+
 
 (provide 'status-volume)
