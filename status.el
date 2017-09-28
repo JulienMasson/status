@@ -45,6 +45,7 @@
 (require 'status-battery)
 (require 'status-date)
 (require 'status-cscope)
+(require 'status-ctags)
 (require 'status-erc)
 
 (defgroup status nil
