@@ -32,7 +32,7 @@
 
 (defun status-ctags ()
   (let ((tags (delq nil (mapcar (lambda (tag)
-                                  (replace-regexp-in-string ".*\/\\([a-z]*\\)\/TAGS$" "\\1" tag))
+                                  (replace-regexp-in-string ".*\/\\([a-z-]*\\)\/TAGS$" "\\1" tag))
                                 tags-table-list))))
     (when tags
       (propertize (mapconcat 'identity tags " - ") 'face 'status-ctags-face))))
