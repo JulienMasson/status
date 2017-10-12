@@ -31,18 +31,26 @@
   :group 'status-erc)
 
 (defcustom status-erc-fmt "%s (%d)"
-  "Status format to display the current gnus in the status area"
-  :group 'status-gnus)
+  "Status format to display the current erc conversation in the status area"
+  :group 'status-erc)
+
+(defcustom status-erc-blacklist '()
+  "List of conversation we don't want to be notified, it's list of regexp"
+  :group 'status-erc)
 
 (defun format-erc (alist)
   (let ((count (cadr alist))
-	(name (buffer-name (car alist))))
-    (format status-erc-fmt name count)))
+	(name (buffer-name (car alist)))
+	(regexp (if status-erc-blacklist
+		    (mapconcat 'identity status-erc-blacklist "\\|")
+		  "?!")))
+    (unless (string-match regexp name)
+      (format status-erc-fmt name count))))
 
 (eval-after-load 'erc-track
   '(progn
      (defun status-erc ()
-       (let ((erc-string (mapcar 'format-erc erc-modified-channels-alist)))
+       (let ((erc-string (delq nil (mapcar 'format-erc erc-modified-channels-alist))))
 	 (when erc-string
 	   (propertize (mapconcat 'identity erc-string " - ") 'face 'status-erc-face))))))
 
