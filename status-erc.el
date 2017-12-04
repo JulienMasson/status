@@ -34,18 +34,13 @@
   "Status format to display the current erc conversation in the status area"
   :group 'status-erc)
 
-(defcustom status-erc-blacklist '()
-  "List of conversation we don't want to be notified, it's list of regexp"
-  :group 'status-erc)
-
 (defun format-erc (alist)
   (let ((count (cadr alist))
-	(name (buffer-name (car alist)))
-	(regexp (if status-erc-blacklist
-		    (mapconcat 'identity status-erc-blacklist "\\|")
-		  "?!")))
-    (unless (string-match regexp name)
-      (format status-erc-fmt name count))))
+	(name (buffer-name (car alist))))
+    (with-current-buffer name
+      (when (and (erc-query-buffer-p)
+		 (erc-server-process-alive))
+	(format status-erc-fmt name count)))))
 
 (eval-after-load 'erc-track
   '(progn
