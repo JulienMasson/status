@@ -48,6 +48,7 @@
 (require 'status-ctags)
 (require 'status-compilation)
 (require 'status-erc)
+(require 'status-mu4e)
 
 (defgroup status nil
   "Status management group."
