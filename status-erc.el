@@ -46,13 +46,13 @@
   "List of ERC buffers name ignored"
   :group 'status-erc)
 
-(defun erc-blacklist-p (buffer)
-  (member buffer (mapcar #'get-buffer status-erc-blacklist)))
+(defun erc-not-blacklist-p (buffer)
+  (not (member buffer (mapcar #'get-buffer status-erc-blacklist))))
 
 (defun erc-chat-list ()
   (seq-filter (lambda (buffer)
 		(with-current-buffer buffer
-		  (and (not (erc-blacklist-p buffer))
+		  (and (erc-not-blacklist-p buffer)
 		       (erc-server-buffer-live-p)
 		       (not (erc-server-buffer-p)))))
 	      (erc-buffer-list)))
