@@ -24,30 +24,66 @@
   "Status cpu group."
   :group 'status)
 
-(defface status-erc-face
-  '((t (:weight bold :width ultra-expanded
-		:inherit variable-pitch :foreground "pink")))
-  "face for date and time"
+(defface status-erc-face-normal
+  '((t (:foreground "DimGray" :weight normal)))
+  "Face used for erc conversation already read"
   :group 'status-erc)
 
-(defcustom status-erc-fmt "%s (%d)"
-  "Status format to display the current erc conversation in the status area"
+(defface status-erc-face-unread
+  '((t (:foreground "DarkOrange" :weight ultra-bold)))
+  "Face used for erc conversation unread"
   :group 'status-erc)
 
-(defun format-erc (alist)
-  (let ((count (cadr alist))
-	(name (buffer-name (car alist))))
-    (with-current-buffer name
-      (when (and (erc-query-buffer-p)
-		 (erc-server-process-alive))
-	(format status-erc-fmt name count)))))
+(defcustom status-erc-fmt-normal "%s"
+  "Format used for erc conversation already read"
+  :group 'status-erc)
+
+(defcustom status-erc-fmt-unread "%s (%d)"
+  "Format used for erc conversation unread"
+  :group 'status-erc)
+
+(defcustom status-erc-blacklist nil
+  "List of ERC buffers name ignored"
+  :group 'status-erc)
+
+(defun erc-blacklist-p (buffer)
+  (member buffer (mapcar #'get-buffer status-erc-blacklist)))
+
+(defun erc-chat-list ()
+  (seq-filter (lambda (buffer)
+		(with-current-buffer buffer
+		  (and (not (erc-blacklist-p buffer))
+		       (erc-server-buffer-live-p)
+		       (not (erc-server-buffer-p)))))
+	      (erc-buffer-list)))
+
+(defun erc-chat-assoc (list)
+  (mapcar (lambda (buffer)
+	    (cons (buffer-name buffer)
+		  (car (assoc-default
+			buffer
+			erc-modified-channels-alist))))
+	  list))
+
+(defun erc-chat-propertize (assoc)
+  (mapcar (lambda (elem)
+	    (let* ((name (car elem))
+		   (count (cdr elem)))
+	      (if count
+	      	  (propertize (format status-erc-fmt-unread name count)
+			      'face 'status-erc-face-unread)
+		(propertize (format status-erc-fmt-normal name)
+			    'face 'status-erc-face-normal))))
+	  assoc))
 
 (eval-after-load 'erc-track
   '(progn
      (defun status-erc ()
-       (let ((erc-string (delq nil (mapcar 'format-erc erc-modified-channels-alist))))
-	 (when erc-string
-	   (propertize (mapconcat 'identity erc-string " - ") 'face 'status-erc-face))))))
+       (let* ((chat-list (erc-chat-list))
+	      (chat-assoc (erc-chat-assoc chat-list))
+	      (chat (erc-chat-propertize chat-assoc)))
+	 (when chat
+	   (mapconcat 'identity chat " - "))))))
 
 
 (provide 'status-erc)
