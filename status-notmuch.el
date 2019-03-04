@@ -62,34 +62,35 @@
 	((< nb status-notmuch-high-threshold) 'status-notmuch-face-medium)
 	('status-notmuch-face-high)))
 
-(defun status-notmuch-folders-propertize (account folders)
+(defun status-notmuch-folders-propertize (account data-list)
   (let ((list-tmp))
-    (mapc (lambda (folder)
-	    (let* ((query (format "folder:\"%s/%s\"" account folder))
-		   (unread (notmuch-count-query
-			    (concat query " and tag:unread"))))
+    (mapc (lambda (data)
+	    (let* ((folder (replace-regexp-in-string
+			    "^.*\\." ""
+			    (plist-get data :folder)))
+		   (unread (plist-get data :unread)))
 	      (when (> unread 0)
 		(add-to-list 'list-tmp
 			     (propertize (format "%s: %s" folder unread)
 					 'face (status-notmuch-get-group-face unread))))))
-	  folders)
+	  data-list)
     (mapconcat 'identity list-tmp " - ")))
 
 (defun status-notmuch-account-propertize (maildir)
   (let ((account (car maildir))
-	(folders (cdr maildir))
+	(data-list (cdr maildir))
 	folders-propertize)
-    (setq folders-propertize (status-notmuch-folders-propertize account folders))
+    (setq folders-propertize (status-notmuch-folders-propertize account data-list))
     (unless (string= "" folders-propertize)
       (concat (propertize (format "✉ %s  " account)
 			  'face 'status-notmuch-face-account)
 	      folders-propertize))))
-       
+
 (defun status-notmuch ()
-  (let* ((maildirs (notmuch-maildir-assoc))
-	 (notmuch-propertize (delq nil (mapcar #'status-notmuch-account-propertize maildirs))))
-    (when notmuch-propertize
-      (mapconcat 'identity notmuch-propertize status-notmuch-separator))))
+  (when notmuch-maildir-data-cached
+    (let ((accounts (delq nil (mapcar #'status-notmuch-account-propertize notmuch-maildir-data-cached))))
+      (when accounts
+	(mapconcat 'identity accounts status-notmuch-separator)))))
 
 
 (provide 'status-notmuch)

@@ -49,6 +49,7 @@
 (require 'status-compilation)
 (require 'status-erc)
 (require 'status-mu4e)
+(require 'status-notmuch)
 
 (defgroup status nil
   "Status management group."
