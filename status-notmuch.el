@@ -65,13 +65,11 @@
 (defun status-notmuch-folders-propertize (account data-list)
   (let ((list-tmp))
     (mapc (lambda (data)
-	    (let* ((folder (replace-regexp-in-string
-			    "^.*\\." ""
-			    (plist-get data :folder)))
-		   (unread (plist-get data :unread)))
+	    (let ((label (plist-get data :label))
+		  (unread (plist-get data :unread)))
 	      (when (> unread 0)
 		(add-to-list 'list-tmp
-			     (propertize (format "%s: %s" folder unread)
+			     (propertize (format "%s: %s" label unread)
 					 'face (status-notmuch-get-group-face unread))))))
 	  data-list)
     (mapconcat 'identity list-tmp " - ")))
