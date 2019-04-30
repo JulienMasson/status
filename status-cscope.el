@@ -20,6 +20,8 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
+(require 'cscope)
+
 (defgroup status-cscope nil
   "Status cscope group."
   :group 'status)
@@ -31,12 +33,11 @@
   :group 'status-cscope)
 
 (defun get-basename-cscope-database (database)
-  (file-name-base (directory-file-name (car database))))
+  (file-name-base (directory-file-name database)))
 
 (defun status-cscope ()
-  (let ((database (delq nil (mapcar 'get-basename-cscope-database jm-cscope-search-list))))
-    (when database
-      (propertize (mapconcat 'identity database " - ") 'face 'status-cscope-face))))
+  (when-let ((database (mapcar 'get-basename-cscope-database cscope-database-list)))
+    (propertize (mapconcat 'identity database " - ") 'face 'status-cscope-face)))
 
 
 (provide 'status-cscope)
