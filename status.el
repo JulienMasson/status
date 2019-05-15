@@ -44,7 +44,7 @@
 (require 'status-volume)
 (require 'status-battery)
 (require 'status-date)
-(require 'status-cscope)
+(require 'status-acscope)
 (require 'status-ctags)
 (require 'status-compilation)
 (require 'status-erc)

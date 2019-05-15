@@ -1,6 +1,6 @@
-;;; status-cscope.el
+;;; status-acscope.el
 
-;; Copyright (C) 2015 Julien Masson
+;; Copyright (C) 2019 Julien Masson
 
 ;; Author: Julien Masson <massonju.eseo@gmail.com>
 ;; Keywords: emacs status cscope
@@ -20,24 +20,24 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
-(require 'cscope)
+(require 'acscope-database)
 
-(defgroup status-cscope nil
-  "Status cscope group."
+(defgroup status-acscope nil
+  "Status acscope group."
   :group 'status)
 
-(defface status-cscope-face
+(defface status-acscope-face
   '((t (:weight bold :width ultra-expanded
 		:inherit variable-pitch :foreground "DarkCyan")))
-  "face for current cscope"
-  :group 'status-cscope)
+  "face for current acscope"
+  :group 'status-acscope)
 
-(defun get-basename-cscope-database (database)
+(defun get-basename-acscope-database (database)
   (file-name-base (directory-file-name database)))
 
-(defun status-cscope ()
-  (when-let ((database (mapcar 'get-basename-cscope-database cscope-database-list)))
-    (propertize (mapconcat 'identity database " - ") 'face 'status-cscope-face)))
+(defun status-acscope ()
+  (when-let ((database (mapcar 'get-basename-acscope-database acscope-database-list)))
+    (propertize (mapconcat 'identity database " - ") 'face 'status-acscope-face)))
 
 
-(provide 'status-cscope)
+(provide 'status-acscope)
