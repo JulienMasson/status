@@ -50,6 +50,7 @@
 (require 'status-erc)
 (require 'status-mu4e)
 (require 'status-notmuch)
+(require 'status-jmail)
 
 (defgroup status nil
   "Status management group."
