@@ -42,9 +42,18 @@
   "face for date and time"
   :group 'status-date)
 
+(defun status-date-str ()
+  (propertize (format-time-string status-date-fmt (current-time))
+	      'face 'status-date-face))
+
+(defun status-time-str ()
+  (propertize (format-time-string status-time-fmt (current-time))
+	      'face 'status-time-face))
+
 (defun status-date ()
   "Issue the date and time string update and should be called via a timer"
-  (concat (propertize (format-time-string status-date-fmt (current-time)) 'face 'status-date-face)
-	  (propertize (format-time-string status-time-fmt (current-time)) 'face 'status-time-face)))
+  (when-let ((fullscreen (frame-parameter nil 'fullscreen)))
+    (when (memq fullscreen '(fullscreen fullboth))
+      (concat (status-date-str) (status-time-str)))))
 
 (provide 'status-date)
