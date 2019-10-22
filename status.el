@@ -51,6 +51,7 @@
 (require 'status-mu4e)
 (require 'status-notmuch)
 (require 'status-jmail)
+(require 'status-tab-bar)
 
 (defgroup status nil
   "Status management group."
