@@ -36,6 +36,10 @@
   "Medium threshold."
   :group 'status-jmail)
 
+(defcustom status-jmail-blacklist nil
+  "Don't display infos from blacklist."
+  :group 'status-jmail)
+
 (defface status-jmail-face-low
   '((t (:foreground "ForestGreen" :weight bold)))
   "face for current jmail"
@@ -74,7 +78,7 @@
 	  (mapconcat 'identity (mapcar #'status-jmail-propertize-data
 				       (cdr account)) " - ")))
 
-(defun status-jmail-build-accounts ()
+(defun status-jmail-build-accounts (data-cached)
   (let ((accounts))
     (mapc (lambda (elem)
 	    (let ((query (car elem))
@@ -88,13 +92,15 @@
 		      	(setcdr (assoc top accounts)
 		      		(add-to-list 'data `(,sub . ,count) t)))
 		    (add-to-list 'accounts (cons top `((,sub . ,count))) t)))))
-	  jmail-unread-data-cached)
+	  data-cached)
     accounts))
 
 (defun status-jmail ()
-  (when jmail-unread-data-cached
-    (when-let ((accounts (status-jmail-build-accounts))
-	       (accounts-str (mapcar #'status-jmail-propertize-account accounts)))
-      (mapconcat 'identity accounts-str status-jmail-separator))))
+  (when-let* ((data-cached (seq-remove (lambda (elem)
+					 (member (car elem) status-jmail-blacklist))
+				       jmail-unread-data-cached))
+	      (accounts (status-jmail-build-accounts data-cached))
+	      (accounts-str (mapcar #'status-jmail-propertize-account accounts)))
+      (mapconcat 'identity accounts-str status-jmail-separator)))
 
 (provide 'status-jmail)
