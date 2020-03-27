@@ -52,6 +52,7 @@
 (require 'status-notmuch)
 (require 'status-jmail)
 (require 'status-tab-bar)
+(require 'status-echat)
 
 (defgroup status nil
   "Status management group."
