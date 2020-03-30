@@ -31,38 +31,21 @@
   "Face used for echat conversation already read"
   :group 'status-echat)
 
-(defun status-echat-string (unread)
-  (let* ((name (plist-get unread :name))
-	 (echat (plist-get unread :echat))
-	 (count (plist-get unread :count)))
-    (propertize (if (zerop count)
-		    name
-		  (format "%s (%d)" name count))
-		'face (oref echat face))))
-
-(defun status-echat-unread-buffer-p (name unreads)
-  (cl-find-if (lambda (unread)
-		(string= (plist-get unread :name) name))
-	      unreads))
-
-(defun status-echat-buffers (unreads)
-  (let (buffers)
+(defun status-echat-unreads ()
+  (let (unreads)
     (dolist (echat echats)
       (let ((face (oref echat face)))
-	(pcase-dolist (`(,name . ,buffer) (oref echat buffers))
-	  (when (buffer-live-p buffer)
-	    (let* ((unread-buffer-p (status-echat-unread-buffer-p name unreads))
-		   (buffer (propertize name 'face (if unread-buffer-p
-						      face
-						    'status-echat-face-normal))))
-	      (add-to-list 'buffers buffer t))))))
-    buffers))
+	(dolist (echat-buffer (oref echat buffers))
+	  (with-slots (name buffer unread-p unread-count) echat-buffer
+	    (when (or (not buffer) (buffer-live-p buffer))
+	      (let ((str-face (if unread-p face 'status-echat-face-normal))
+		    (str (if (zerop unread-count) name
+			   (format "%s (%s)" name unread-count))))
+		(add-to-list 'unreads (propertize str 'face str-face))))))))
+    unreads))
 
 (defun status-echat ()
-  (let* ((data (delq nil (mapcar #'echat-unread-queries echats)))
-	 (unreads (mapcar #'status-echat-string (apply #'append data)))
-	 (buffers (status-echat-buffers unreads))
-	 (strings (delq nil (append unreads buffers))))
-    (when strings (string-join strings " - "))))
+  (when-let ((unreads (status-echat-unreads)))
+    (string-join unreads " - ")))
 
 (provide 'status-echat)
