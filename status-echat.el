@@ -36,8 +36,9 @@
     (dolist (echat echats)
       (let ((face (oref echat face)))
 	(dolist (echat-buffer (oref echat buffers))
-	  (with-slots (name buffer unread-p unread-count) echat-buffer
-	    (when (or (not buffer) (buffer-live-p buffer))
+	  (with-slots (name buffer mute-p unread-p unread-count) echat-buffer
+	    (when (and (or (not buffer) (buffer-live-p buffer))
+		       (not mute-p))
 	      (let ((str-face (if unread-p face 'status-echat-face-normal))
 		    (str (if (zerop unread-count) name
 			   (format "%s (%s)" name unread-count))))
