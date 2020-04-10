@@ -58,6 +58,11 @@
   "Status management group."
   :group 'convenience)
 
+(defface status-separator-face
+  '((t (:weight bold :width ultra-expanded :foreground "gray24")))
+  "face for separator"
+  :group 'status)
+
 (defconst status-module-buffer (get-buffer " *Minibuf-0*")
   "Buffer in which write the status information.")
 
@@ -102,7 +107,7 @@ refresh the status information."
 
 (defun status-build-items (items)
   (mapconcat 'identity (delq nil (mapcar 'status-build-item items))
-	     status-separator))
+	     (propertize status-separator 'face 'status-separator-face)))
 
 (defun status-window-width ()
   (let ((edges (window-inside-pixel-edges (minibuffer-window))))
