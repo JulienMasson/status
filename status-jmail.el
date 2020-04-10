@@ -24,10 +24,6 @@
   "Status jmail group."
   :group 'status)
 
-(defcustom status-jmail-separator " | "
-  "JMAIL status separator."
-  :group 'status-jmail)
-
 (defcustom status-jmail-high-threshold 30
   "Medium threshold."
   :group 'status-jmail)
@@ -66,8 +62,8 @@
 (defun status-jmail-propertize-account (account)
   (concat (propertize (format "✉ %s  " (car account))
 		      'face 'status-jmail-face-account)
-	  (mapconcat 'identity (mapcar #'status-jmail-propertize-data
-				       (cdr account)) " - ")))
+	  (string-join (mapcar #'status-jmail-propertize-data (cdr account))
+		       (propertize " - " 'face 'status-separator-face))))
 
 (defun status-jmail-build-accounts (data-cached)
   (let ((accounts))
@@ -92,6 +88,7 @@
 				       jmail-unread-data-cached))
 	      (accounts (status-jmail-build-accounts data-cached))
 	      (accounts-str (mapcar #'status-jmail-propertize-account accounts)))
-      (mapconcat 'identity accounts-str status-jmail-separator)))
+    (string-join accounts-str (propertize status-separator 'face
+					  'status-separator-face))))
 
 (provide 'status-jmail)

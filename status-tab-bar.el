@@ -25,7 +25,7 @@
   :group 'status)
 
 (defface status-tab-bar-normal
-  '((t (:foreground "DimGray" :weight normal)))
+  '((t (:foreground "DimGray" :weight bold)))
   "Face used to display bar tab"
   :group 'status-tab-bar)
 

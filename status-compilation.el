@@ -26,7 +26,7 @@
 
 (defface status-compilation-face
   '((t (:weight bold :width ultra-expanded
-		:inherit variable-pitch :foreground "DarkGoldenrod2")))
+		:inherit variable-pitch :foreground "sienna2")))
   "face for current compilation"
   :group 'status-compilation)
 

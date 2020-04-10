@@ -47,6 +47,6 @@
 
 (defun status-echat ()
   (when-let ((unreads (status-echat-unreads)))
-    (string-join unreads " - ")))
+    (string-join unreads (propertize " - " 'face 'status-separator-face))))
 
 (provide 'status-echat)

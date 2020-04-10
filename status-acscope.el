@@ -28,7 +28,7 @@
 
 (defface status-acscope-face
   '((t (:weight bold :width ultra-expanded
-		:inherit variable-pitch :foreground "DarkCyan")))
+		:inherit variable-pitch :foreground "SeaGreen4")))
   "face for current acscope"
   :group 'status-acscope)
 
