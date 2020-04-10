@@ -28,10 +28,6 @@
   "JMAIL status separator."
   :group 'status-jmail)
 
-(defcustom status-jmail-medium-threshold 10
-  "Medium threshold."
-  :group 'status-jmail)
-
 (defcustom status-jmail-high-threshold 30
   "Medium threshold."
   :group 'status-jmail)
@@ -42,11 +38,6 @@
 
 (defface status-jmail-face-low
   '((t (:foreground "ForestGreen" :weight bold)))
-  "face for current jmail"
-  :group 'status-jmail)
-
-(defface status-jmail-face-medium
-  '((t (:foreground "DarkOrange" :weight bold)))
   "face for current jmail"
   :group 'status-jmail)
 
@@ -62,9 +53,9 @@
   :group 'status-jmail)
 
 (defun status-jmail-get-group-face (nb)
-  (cond ((< nb status-jmail-medium-threshold) 'status-jmail-face-low)
-	((< nb status-jmail-high-threshold) 'status-jmail-face-medium)
-	('status-jmail-face-high)))
+  (if (< nb status-jmail-high-threshold)
+      'status-jmail-face-low
+    'status-jmail-face-high))
 
 (defun status-jmail-propertize-data (data)
   (let ((sub (car data))
