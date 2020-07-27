@@ -53,6 +53,7 @@
 (require 'status-jmail)
 (require 'status-tab-bar)
 (require 'status-echat)
+(require 'status-epurple)
 
 (defgroup status nil
   "Status management group."
