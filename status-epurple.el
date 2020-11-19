@@ -36,13 +36,12 @@
     (dolist (account epurple-accounts)
       (with-struct-slots (face prpl-buffers) epurple-account account
 	(dolist (prpl-buffer prpl-buffers)
-	  (with-struct-slots (conv-name buffer mute-p unread-p unread-count)
+	  (with-struct-slots (display-name buffer mute-p unread-p unread-count)
 	    epurple-buffer prpl-buffer
 	    (when (and (or (not buffer) (buffer-live-p buffer)) (not mute-p))
-	      (let* ((name (decode-coding-string conv-name 'utf-8))
-		     (str-face (if unread-p face 'status-epurple-face-normal))
-		     (str (if (zerop unread-count) name
-			    (format "%s (%s)" name unread-count))))
+	      (let* ((str-face (if unread-p face 'status-epurple-face-normal))
+		     (str (if (zerop unread-count) display-name
+			    (format "%s (%s)" display-name unread-count))))
 		(add-to-list 'buffers (propertize str 'face str-face))))))))
     buffers))
 
