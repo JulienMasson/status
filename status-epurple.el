@@ -31,15 +31,22 @@
   "Face used for epurple conversation already read"
   :group 'status-epurple)
 
+(defface status-epurple-face-disconnected
+  '((t (:foreground "DarkRed" :weight bold)))
+  "Face used for epurple conversation disconnected"
+  :group 'status-epurple)
+
 (defun status-epurple-buffers ()
   (let (buffers)
     (dolist (account epurple-accounts)
-      (with-struct-slots (face prpl-buffers) epurple-account account
+      (with-struct-slots (face active-p prpl-buffers) epurple-account account
 	(dolist (prpl-buffer prpl-buffers)
 	  (with-struct-slots (display-name buffer mute-p unread-p unread-count)
 	    epurple-buffer prpl-buffer
 	    (when (and (or (not buffer) (buffer-live-p buffer)) (not mute-p))
-	      (let* ((str-face (if unread-p face 'status-epurple-face-normal))
+	      (let* ((str-face (cond ((not active-p) 'status-epurple-face-disconnected)
+				     (unread-p face)
+				     (t 'status-epurple-face-normal)))
 		     (str (if (zerop unread-count) display-name
 			    (format "%s (%s)" display-name unread-count))))
 		(add-to-list 'buffers (propertize str 'face str-face))))))))
