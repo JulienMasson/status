@@ -33,28 +33,6 @@
 ;; respectively add information to the left hand side and to the right
 ;; hand side of the echo area.
 
-(require 'status-activity)
-(require 'status-project-manager)
-(require 'status-purple)
-(require 'status-gnus)
-(require 'status-virtual-desktops)
-(require 'status-mem)
-(require 'status-cpu)
-(require 'status-net)
-(require 'status-volume)
-(require 'status-battery)
-(require 'status-date)
-(require 'status-acscope)
-(require 'status-ctags)
-(require 'status-compilation)
-(require 'status-erc)
-(require 'status-mu4e)
-(require 'status-notmuch)
-(require 'status-jmail)
-(require 'status-tab-bar)
-(require 'status-echat)
-(require 'status-epurple)
-
 (defgroup status nil
   "Status management group."
   :group 'convenience)
