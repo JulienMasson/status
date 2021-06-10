@@ -31,6 +31,11 @@
   "Face used for epurple conversation already read"
   :group 'status-epurple)
 
+(defface status-epurple-face-mention
+  '((t (:foreground "tomato1" :weight bold)))
+  "Face used when user mentioned in epurple conversation"
+  :group 'status-epurple)
+
 (defface status-epurple-face-disconnected
   '((t (:foreground "DarkRed" :weight bold)))
   "Face used for epurple conversation disconnected"
@@ -41,10 +46,12 @@
     (dolist (account epurple-accounts)
       (with-struct-slots (face active-p prpl-buffers) epurple-account account
 	(dolist (prpl-buffer prpl-buffers)
-	  (with-struct-slots (display-name buffer mute-p unread-p unread-count)
+	  (with-struct-slots (display-name buffer mute-p mention-p unread-p unread-count)
 	    epurple-buffer prpl-buffer
-	    (when (and (or (not buffer) (buffer-live-p buffer)) (not mute-p))
+	    (when (and (or (not buffer) (buffer-live-p buffer))
+		       (or (not mute-p) mention-p))
 	      (let* ((str-face (cond ((not active-p) 'status-epurple-face-disconnected)
+				     (mention-p 'status-epurple-face-mention)
 				     (unread-p face)
 				     (t 'status-epurple-face-normal)))
 		     (str (if (zerop unread-count) display-name
