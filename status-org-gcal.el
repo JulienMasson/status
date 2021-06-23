@@ -35,6 +35,10 @@
   "List of org agenda files to check"
   :group 'status-org-gcal)
 
+(defcustom status-org-gcal-secs-before 0
+  "Display events secs before they start"
+  :group 'status-org-gcal)
+
 (defvar status-org-gcal-events-muted nil)
 (defvar status-org-gcal-events-muted-today (org-today))
 
@@ -79,9 +83,13 @@
 		      events)))))))
     events))
 
+(defun org-gcal-now-before-secs ()
+  (let ((cur-time (+ (time-convert nil 'integer) status-org-gcal-secs-before)))
+    (parse-time-string (current-time-string cur-time))))
+
 (defun org-gcal-less-now (mins hours day month year)
   (pcase-let ((`(,_ ,mins-now ,hours-now ,day-now ,month-now ,year-now ,_ ,_ ,_)
-	       (parse-time-string (current-time-string))))
+	       (org-gcal-now-before-secs)))
     (and (= year year-now) (= month month-now) (= day day-now)
 	 (if (and mins hours)
 	     (or (< hours hours-now) (and (= hours hours-now) (< mins mins-now)))
