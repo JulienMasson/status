@@ -41,6 +41,10 @@
   "Face used for epurple conversation disconnected"
   :group 'status-epurple)
 
+(defcustom status-epurple-display-open-conv t
+  "Display in status open conversation not muted even if unread count is 0"
+  :group 'status-epurple)
+
 (defun status-epurple-buffers ()
   (let (buffers)
     (dolist (account epurple-accounts)
@@ -49,7 +53,8 @@
 	  (with-struct-slots (display-name buffer mute-p mention-p unread-p unread-count)
 	    epurple-buffer prpl-buffer
 	    (when (and (or (not buffer) (buffer-live-p buffer))
-		       (or (not mute-p) mention-p))
+		       (or (not mute-p) mention-p)
+		       (or status-epurple-display-open-conv unread-p mention-p))
 	      (let* ((str-face (cond ((not active-p) 'status-epurple-face-disconnected)
 				     (mention-p 'status-epurple-face-mention)
 				     (unread-p face)
